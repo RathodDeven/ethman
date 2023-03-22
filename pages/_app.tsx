@@ -3,6 +3,7 @@ import { PolybaseProvider, AuthProvider } from "@polybase/react";
 import type { AppProps } from "next/app";
 import { Polybase } from "@polybase/client";
 import { Auth } from "@polybase/auth";
+import PopUpProvider from "@/components/Contexts/PopUpProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   const polybase = new Polybase({
@@ -13,7 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <PolybaseProvider polybase={polybase}>
       {/* @ts-ignore */}
       <AuthProvider auth={auth} polybase={polybase}>
-        <Component {...pageProps} />
+        <PopUpProvider>
+          <Component {...pageProps} />
+        </PopUpProvider>
       </AuthProvider>
     </PolybaseProvider>
   );

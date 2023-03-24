@@ -5,6 +5,7 @@ import { UserType } from "./Navbar";
 import { usePolybase } from "@polybase/react";
 import { useNotify } from "../Contexts/NotifyProvider";
 import { usePopUp } from "../Contexts/PopUpProvider";
+import { containsWhiteSpace } from "@/utils/helper";
 const SetNameModal = ({ user }: { user: UserType }) => {
   const pb = usePolybase();
   const userRecordRef = pb?.collection("User").record(String(user?.id));
@@ -15,6 +16,11 @@ const SetNameModal = ({ user }: { user: UserType }) => {
   const handleSavename = async () => {
     try {
       setLoading(true);
+      if (containsWhiteSpace(String(inputRef.current.value))) {
+        notifyError("Name cannot contain whitespace");
+        setLoading(false);
+        return;
+      }
       const userData = await userRecordRef?.call("setUserName", [
         String(inputRef.current.value),
       ]);

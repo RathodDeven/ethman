@@ -6,9 +6,15 @@ const ContractSelect = ({ contract }: { contract: ContractType }) => {
   const setCurrentContract = useContractStore(
     (state) => state.setCurrentContract
   );
+
   const onSelect = () => {
     setCurrentContract(contract);
   };
+
+  console.log(contract);
+
+  if (!contract) return <div>loading</div>;
+
   return (
     <button
       onClick={onSelect}

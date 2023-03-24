@@ -6,15 +6,15 @@ const PopUpWrapper = ({
   title,
   onClick,
   loading = false,
-  label,
+  label = "Save",
   children,
   isDisabled = false,
   Icon,
 }: {
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   loading?: boolean;
-  label: string;
+  label?: string;
   children: React.ReactNode;
   isDisabled?: boolean;
   Icon: React.ReactNode;

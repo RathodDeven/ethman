@@ -7,7 +7,7 @@ const CreatedContractList = () => {
   const pb = usePolybase();
   const { state } = useAuth();
   const { data, error } = useCollection<ContractType>(
-    pb.collection("Contract").where("creatorPublicKey", "==", state.publicKey)
+    pb.collection("Contract").where("creatorPublicKey", "==", state?.publicKey)
   );
 
   React.useEffect(() => {
@@ -16,7 +16,7 @@ const CreatedContractList = () => {
 
   return (
     <>
-      <div className="text-xs text-s-text py-1">Created Contracts</div>
+      <div className="text-xs text-s-text py-1 mb-3">Created Contracts : </div>
       {data?.data &&
         data?.data.length > 0 &&
         data?.data.map((d) => (

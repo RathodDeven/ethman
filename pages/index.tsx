@@ -19,7 +19,7 @@ export default function Home() {
         {currentContract ? (
           <ContractPage />
         ) : (
-          <div className="w-full text-center flex justify-center items-center">
+          <div className="w-full text-center mt-60 flex justify-center items-center">
             Select a contract
           </div>
         )}

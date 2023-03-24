@@ -7,3 +7,8 @@ export const randomString = (length: number): string => {
     result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 };
+
+// containsWhiteSpace function
+export const containsWhiteSpace = (s: string): boolean => {
+  return /\s/g.test(s);
+};

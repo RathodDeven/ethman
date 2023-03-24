@@ -6,6 +6,14 @@
   .centered-row {
     @apply flex flex-row items-center justify-center space-x-2;
   }
+
+  .start-row {
+    @apply flex flex-row items-center justify-start space-x-2;
+  }
+
+  .space-between-row {
+    @apply flex flex-row items-center justify-between space-x-2;
+  }
 }
 
 :root {

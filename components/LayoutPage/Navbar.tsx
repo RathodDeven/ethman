@@ -1,91 +1,121 @@
 import React from "react";
-import { useAuth, useIsAuthenticated, usePolybase } from "@polybase/react";
+import {
+  useAuth,
+  useDocument,
+  useIsAuthenticated,
+  usePolybase,
+} from "@polybase/react";
 import OptionsModal from "../Helpers/OptionsModal";
 import { usePopUp } from "../Contexts/PopUpProvider";
 import SetNameModal from "./SetNameModal";
+import { PublicKey } from "@polybase/client";
+import clsx from "clsx";
+import Image from "next/image";
+import AddContractButton from "../AddContractButton/AddContractButton";
+
+export interface UserType {
+  id: string;
+  publicKey: PublicKey;
+  userName?: string;
+}
+
 const Navbar = () => {
   const { auth, state, loading } = useAuth();
   const [isLoggedIn, authLoading] = useIsAuthenticated();
   const pb = usePolybase();
-  const userCollectionRef = pb?.collection("User");
   const { showModal } = usePopUp();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
-  const [user, setUser] = React.useState(null);
+  const {
+    data,
+    loading: userLoading,
+    error,
+  } = useDocument<UserType>(
+    pb.collection("User").record(String(state?.userId))
+  );
 
-  const checkIfUserExistsInSchemaOrAdd = async () => {
-    try {
-      const { data } = await userCollectionRef
-        .record(String(state?.userId))
-        .get();
-      console.log("data", data);
-      setUser(data);
-    } catch (error) {
-      console.log(error);
-      // @ts-ignore
-      if (error.reason === "record/not-found") {
-        const { data } = await userCollectionRef.create([
-          String(state?.userId),
-        ]);
-        if (!data) return;
-        await checkIfUserExistsInSchemaOrAdd();
-      }
-    }
+  const createUser = async () => {
+    await pb.collection("User").create([String(state?.userId)]);
   };
-
-  React.useEffect(() => {
-    if (isLoggedIn && state) {
-      checkIfUserExistsInSchemaOrAdd();
-    }
-  }, [isLoggedIn, state]);
 
   const showSetNameModal = () => {
     showModal({
-      component: <SetNameModal />,
+      component: <SetNameModal user={data?.data} />,
     });
   };
   return (
-    <div className=" bg-s-bg flex flex-row w-full justify-between px-8 py-3">
-      <div></div>
+    <div className=" bg-s-bg flex flex-row w-full justify-between px-8 py-2">
+      <div className="centered-row">
+        <Image
+          src={"/EthmanLogo512x512.png"}
+          className="rounded-xl"
+          width={40}
+          height={40}
+          alt="Ethman Logo"
+        />
+        <div className="text-xl font-bold ml-2">Ethman</div>
+      </div>
       <div className="self-end">
         {!loading && !authLoading ? (
           <>
             {isLoggedIn ? (
-              <div className="centered-row">
-                <OptionsModal
-                  OptionsPopUpModal={
-                    <div className="flex flex-col space-y-2 w-[150px]">
-                      <button
-                        onClick={showSetNameModal}
-                        className="px-4 py-1 bg-s-bg rounded-md hover:bg-p-bg"
-                      >
-                        Set Username
-                      </button>
-                      <button
-                        className="px-4 py-1 bg-red-400 rounded-md"
-                        onClick={() => auth.signOut()}
-                      >
-                        Sign Out
-                      </button>
+              <>
+                {data?.data ? (
+                  <div className="centered-row">
+                    <div>
+                      <AddContractButton />
                     </div>
-                  }
-                  setShowModal={setOpenModal}
-                  showModal={openModal}
-                  position="right"
-                >
-                  <div className="px-4 py-2 border-p-border border rounded-xl flex flex-col">
-                    {user?.userName && <div>{user?.userName}</div>}
-                    {state?.type === "email"
-                      ? state?.email
-                      : `${state?.userId?.slice(0, 6)}...`}
+                    <OptionsModal
+                      OptionsPopUpModal={
+                        <div className="flex flex-col space-y-2 w-[150px]">
+                          <button
+                            onClick={showSetNameModal}
+                            className="px-4 py-1 bg-s-bg rounded-md hover:bg-p-bg"
+                          >
+                            Set Username
+                          </button>
+                          <button
+                            className="px-4 py-1 bg-red-400 rounded-md"
+                            onClick={() => auth.signOut()}
+                          >
+                            Sign Out
+                          </button>
+                        </div>
+                      }
+                      setShowModal={setOpenModal}
+                      showModal={openModal}
+                      position="right"
+                    >
+                      <div className="px-4 py-1 border-p-border border rounded-xl flex flex-col">
+                        {data?.data?.userName && (
+                          <div className="text-sm">{data?.data?.userName}</div>
+                        )}
+                        <div
+                          className={clsx(
+                            data?.data?.userName && "text-xs text-s-text"
+                          )}
+                        >
+                          {state?.type === "email"
+                            ? state?.email
+                            : `${state?.userId?.slice(0, 6)}...`}
+                        </div>
+                      </div>
+                    </OptionsModal>
                   </div>
-                </OptionsModal>
-              </div>
+                ) : (
+                  <button
+                    className="px-4 py-1 bg-brand  rounded-md"
+                    onClick={createUser}
+                  >
+                    Sign In
+                  </button>
+                )}
+              </>
             ) : (
               <button
                 className="px-4 py-1 bg-brand  rounded-md"
                 onClick={() => auth.signIn()}
               >
-                Sign In
+                Connect
               </button>
             )}
           </>

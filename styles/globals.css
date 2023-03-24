@@ -34,3 +34,8 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

@@ -43,7 +43,7 @@ const PopUpProvider = ({ children }) => {
                 onClick={providerVal.hideModal}
               ></div>
               <div
-                className={`flex overflow-y-scroll no-scrollbar relative`}
+                className={`flex overflow-y-auto no-scrollbar relative`}
                 style={{ zIndex: 1 }}
               >
                 {modal.component}

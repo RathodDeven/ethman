@@ -10,6 +10,7 @@ module.exports = {
         "p-bg": "#f9f9f9",
         "s-bg": "#ffffff",
         "p-text": "#000000",
+        "s-text": "#6b6b6b",
         "p-border": "#e5e5e7",
         "p-btn": "#4294db",
         "p-btn-disabled": "#6b91b3",

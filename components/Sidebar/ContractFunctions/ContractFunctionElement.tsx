@@ -1,13 +1,8 @@
 import React from "react";
-import { FunctionFragment } from "ethers/types/abi";
 import clsx from "clsx";
 import { useContractStore } from "@/store/contract";
 
-const ContractFunctionElement = ({
-  functionItem,
-}: {
-  functionItem: FunctionFragment;
-}) => {
+const ContractFunctionElement = ({ functionItem }) => {
   const selectedFunction = useContractStore((state) => state.selectedFunction);
   const setSelectedFunction = useContractStore(
     (state) => state.setSelectedFunction
@@ -18,30 +13,28 @@ const ContractFunctionElement = ({
         setSelectedFunction(functionItem);
       }}
       className={clsx(
-        "w-full border-2 border-p-border rounded-xl my-2 py-2 px-6 font-bold cursor-pointer",
+        "w-full border-2 rounded-xl my-2 py-2 px-6 font-bold cursor-pointer",
         functionItem.stateMutability === "pure" &&
           clsx(
-            "border-[#FFD700]",
-            selectedFunction?.name === functionItem.name &&
-              "bg-[#FFD700] text-white"
+            "border-pure",
+            selectedFunction?.name === functionItem.name && "bg-pure text-white"
           ),
         functionItem.stateMutability === "view" &&
           clsx(
-            "border-[#00FF00]",
-            selectedFunction?.name === functionItem.name &&
-              "bg-[#00FF00] text-white"
+            "border-view",
+            selectedFunction?.name === functionItem.name && "bg-view text-white"
           ),
         functionItem.stateMutability === "nonpayable" &&
           clsx(
-            "border-[#FFA500]",
+            "border-nonpayable",
             selectedFunction?.name === functionItem.name &&
-              "bg-[#FFA500] text-white"
+              "bg-nonpayable text-white"
           ),
         functionItem.stateMutability === "payable" &&
           clsx(
-            "border-[#FFC0CB]",
+            "border-payable",
             selectedFunction?.name === functionItem.name &&
-              "bg-[#FFC0CB] text-white"
+              "bg-payable text-white"
           )
       )}
     >

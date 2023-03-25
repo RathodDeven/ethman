@@ -14,13 +14,7 @@ export const NotfiyContext = createContext<ContextType>(null);
 
 export const NotifyProvider = ({ children }) => {
   const notifyInfo = (message: string) => {
-    toast.info(message, {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      progress: undefined,
-    });
+    toast.info(message);
   };
 
   const notifyError = (message: string) => {
@@ -34,7 +28,7 @@ export const NotifyProvider = ({ children }) => {
     <NotfiyContext.Provider value={{ notifyInfo, notifyError, notifySuccess }}>
       <ToastContainer
         position="top-center"
-        autoClose={4000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

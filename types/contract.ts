@@ -8,4 +8,5 @@ export interface ContractType {
   abi?: string;
   collaborators?: UserType[];
   contractAddress?: string;
+  functionDescription?: Map<string, string>;
 }

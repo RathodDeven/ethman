@@ -12,7 +12,9 @@ const CreatedContractList = () => {
 
   return (
     <>
-      <div className="text-xs text-s-text py-1 mb-3">Created Contracts : </div>
+      <div className="text-sm font-semibold text-s-text py-1 mb-3">
+        Added Contracts :{" "}
+      </div>
       {data?.data &&
         data?.data.length > 0 &&
         data?.data.map((d) => (

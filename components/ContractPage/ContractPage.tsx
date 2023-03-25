@@ -4,10 +4,12 @@ import React from "react";
 import { AiOutlineLink } from "react-icons/ai";
 import ContractDescription from "./ContractDescription";
 import ContractName from "./ContractName";
+import FunctionSection from "./FunctionSection/FunctionSection";
 import SettingsButton from "./Settings/SettingsButton";
 
 const ContractPage = () => {
   const currentContract = useContractStore((state) => state.currentContract);
+  const selectedFunction = useContractStore((state) => state.selectedFunction);
   return (
     <div className="p-4">
       <div className="space-between-row">
@@ -26,6 +28,15 @@ const ContractPage = () => {
         <ContractDescription contract={currentContract} />
         <SettingsButton />
       </div>
+
+      {selectedFunction ? (
+        <FunctionSection />
+      ) : (
+        <div className="mt-40 w-full text-center font-semibold text-s-text">
+          {" "}
+          Select a function to view its details
+        </div>
+      )}
     </div>
   );
 };

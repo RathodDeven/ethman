@@ -6,14 +6,14 @@ const LayoutPage = ({ children }) => {
   return (
     <div className="h-[100vh] flex flex-col bg-p-bg relative">
       <Navbar />
-      <div className="flex flex-row h-full">
+      <div className="flex flex-row h-[calc(100vh-70px)] relative bg-p-bg">
         {/* sidebar */}
-        <div className="m-4">
+        <div className="m-6 mt-8">
           <Sidebar />
         </div>
 
         {/* main content */}
-        <div className="flex-1 m-4 border-p-border border bg-s-bg rounded-xl">
+        <div className="flex-1 m-6 mt-8 border-p-border border bg-s-bg rounded-xl">
           {children}
         </div>
 

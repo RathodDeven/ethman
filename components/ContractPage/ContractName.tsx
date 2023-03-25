@@ -48,7 +48,7 @@ const ContractName = ({ contract }: { contract: ContractType }) => {
           <input
             type="text"
             ref={inputRef}
-            className="text-xl font-semibold outline-none"
+            className="text-xl w-fit font-semibold outline-none"
             defaultValue={contract.name}
           />
           <TiTick className="w-6 h-6 ml-2" onClick={handleEdit} />

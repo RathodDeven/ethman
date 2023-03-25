@@ -12,6 +12,7 @@ import { PublicKey } from "@polybase/client";
 import clsx from "clsx";
 import Image from "next/image";
 import AddContractButton from "../AddContractButton/AddContractButton";
+import { getStampFyiURL } from "@/utils/helper";
 
 export interface UserType {
   id: string;
@@ -25,11 +26,7 @@ const Navbar = () => {
   const pb = usePolybase();
   const { showModal } = usePopUp();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
-  const {
-    data,
-    loading: userLoading,
-    error,
-  } = useDocument<UserType>(
+  const { data } = useDocument<UserType>(
     pb.collection("User").record(String(state?.userId))
   );
 
@@ -85,18 +82,31 @@ const Navbar = () => {
                       showModal={openModal}
                       position="right"
                     >
-                      <div className="px-4 py-1 border-p-border border rounded-xl flex flex-col">
-                        {data?.data?.userName && (
-                          <div className="text-sm">{data?.data?.userName}</div>
-                        )}
-                        <div
-                          className={clsx(
-                            data?.data?.userName && "text-xs text-s-text"
+                      <div className="pl-2 pr-4 py-1 border-p-border border rounded-xl start-row">
+                        <div>
+                          <Image
+                            src={getStampFyiURL(state?.userId)}
+                            width={35}
+                            height={35}
+                            alt={state?.userId}
+                            className="rounded-full"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          {data?.data?.userName && (
+                            <div className="text-sm">
+                              {data?.data?.userName}
+                            </div>
                           )}
-                        >
-                          {state?.type === "email"
-                            ? state?.email
-                            : `${state?.userId?.slice(0, 6)}...`}
+                          <div
+                            className={clsx(
+                              data?.data?.userName && "text-xs text-s-text"
+                            )}
+                          >
+                            {state?.type === "email"
+                              ? state?.email
+                              : `${state?.userId?.slice(0, 6)}...`}
+                          </div>
                         </div>
                       </div>
                     </OptionsModal>

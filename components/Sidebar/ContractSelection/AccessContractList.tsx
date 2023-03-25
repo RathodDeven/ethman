@@ -16,7 +16,9 @@ const AccessContractList = () => {
 
   return (
     <>
-      <div className="text-xs text-s-text py-1 mb-3">Accessed Contracts : </div>
+      <div className="text-xs text-s-text py-1 mb-3 mt-3">
+        Accessed Contracts :{" "}
+      </div>
       {data?.data &&
         data?.data.map((d) => (
           <ContractSelectWithJustContractId

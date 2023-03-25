@@ -10,10 +10,6 @@ const CreatedContractList = () => {
     pb.collection("Contract").where("creatorPublicKey", "==", state?.publicKey)
   );
 
-  React.useEffect(() => {
-    console.log(data?.data);
-  }, [data]);
-
   return (
     <>
       <div className="text-xs text-s-text py-1 mb-3">Created Contracts : </div>

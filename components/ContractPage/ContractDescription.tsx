@@ -47,7 +47,7 @@ const ContractDescription = ({ contract }: { contract: ContractType }) => {
           <input
             type="text"
             ref={inputRef}
-            className="text-xs font-semibold outline-none"
+            className="text-xs min-w-[300px] font-semibold outline-none"
             placeholder="Add Description"
             defaultValue={contract.description}
           />

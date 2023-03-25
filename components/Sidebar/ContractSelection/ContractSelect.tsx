@@ -11,8 +11,6 @@ const ContractSelect = ({ contract }: { contract: ContractType }) => {
     setCurrentContract(contract);
   };
 
-  console.log(contract);
-
   if (!contract) return <div>loading</div>;
 
   return (

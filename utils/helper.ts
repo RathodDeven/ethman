@@ -12,3 +12,11 @@ export const randomString = (length: number): string => {
 export const containsWhiteSpace = (s: string): boolean => {
   return /\s/g.test(s);
 };
+
+export const getStampFyiURL = (address: string) => {
+  let currentAddress = address;
+  if (!address) {
+    currentAddress = "0x0000000000000000000000000000000000000000";
+  }
+  return `https://cdn.stamp.fyi/avatar/eth:${currentAddress.toLowerCase()}?s=250`;
+};

@@ -8,7 +8,8 @@ const ReturnOutput = ({ value }) => {
   if (ethers.BigNumber.isBigNumber(value)) {
     return <div>{ethers.BigNumber.from(value._hex).toNumber()}</div>;
   }
-  return <div>ReturnOutput</div>;
+
+  return <div>{String(value)}</div>;
 };
 
 export default ReturnOutput;

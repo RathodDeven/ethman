@@ -1,6 +1,6 @@
 import { ContractType } from "@/types/contract";
 import { useAuth, usePolybase, useRecord } from "@polybase/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { CiEdit } from "react-icons/ci";
 import { TiTick } from "react-icons/ti";
 import { useNotify } from "../Contexts/NotifyProvider";

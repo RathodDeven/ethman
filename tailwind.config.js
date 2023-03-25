@@ -18,7 +18,7 @@ module.exports = {
         pure: "#FFD700",
         view: "#00FF00",
         nonpayable: "#FFA500",
-        payable: "#FFC0CB",
+        payable: "#e6405d",
         brand: "#457ed9",
       },
     },

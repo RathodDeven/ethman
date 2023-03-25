@@ -8,7 +8,7 @@ import {
   usePolybase,
   useRecord,
 } from "@polybase/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { CiEdit } from "react-icons/ci";
 import { TiTick } from "react-icons/ti";
 
@@ -21,6 +21,14 @@ const SelectedFunctionDescription = () => {
   const [hovering, setHovering] = React.useState(false);
   const { notifyError, notifySuccess } = useNotify();
   const pb = usePolybase();
+
+  useEffect(() => {
+    setEditing(false);
+    if (inputRef?.current) {
+      inputRef.current.value =
+        currentContract?.functionDescription?.[selectedFunction?.name] || "";
+    }
+  }, [selectedFunction?.name]);
 
   const { data: user } = useRecord<UserType>(
     pb.collection("User").record(String(state?.userId))

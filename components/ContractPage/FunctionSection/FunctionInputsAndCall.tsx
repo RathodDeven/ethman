@@ -11,10 +11,10 @@ const FunctionInputsAndCall = () => {
   const currentContract = useContractStore((state) => state.currentContract);
   const [inputs, setInputs] = React.useState<any[]>([]);
   const [returns, setReturns] = React.useState<any[]>([]);
+  const [value, setValue] = React.useState<string>("0");
 
   React.useEffect(() => {
     if (!selectedFunction) return;
-    console.log(selectedFunction);
     setInputs([]);
     setReturns([]);
   }, [selectedFunction?.name]);
@@ -42,23 +42,50 @@ const FunctionInputsAndCall = () => {
       );
 
       // call the function
-      const res = await contract[selectedFunction?.name]?.(...inputs);
-      console.log(res);
+      let res;
+      if (selectedFunction?.stateMutability === "payable") {
+        res = await contract[selectedFunction?.name]?.(...inputs, {
+          value: ethers.utils.parseEther(value),
+          gasLimit: 1000000,
+        });
+      } else {
+        res = await contract[selectedFunction?.name]?.(...inputs);
+      }
+      console.log("res", res);
 
       if (
         selectedFunction?.stateMutability === "nonpayable" ||
         selectedFunction?.stateMutability === "payable"
       ) {
         setCalling("Waiting for confirmation...");
-        await res.wait();
+        const receipt = await res.wait();
+        console.log(receipt);
+        const returnValue = receipt.events[0].args.value;
+        console.log("returnValue", returnValue);
+        if (Array.isArray(returnValue)) {
+          setReturns(returnValue);
+        } else {
+          setReturns([returnValue]);
+        }
         notifySuccess("Transaction successful");
+        return;
       } else {
         notifySuccess("Call successful");
+        // if res is an array then set it as returns, else set it as an array
+        if (Array.isArray(res)) {
+          setReturns(res);
+          return;
+        } else {
+          setReturns([res]);
+        }
       }
-      setReturns([res]);
     } catch (error) {
       console.log(error);
-      notifyError("Something went wrong | " + error?.reason);
+      if (error?.reason) {
+        notifyError(error?.reason);
+        return;
+      }
+      notifyError("Something went wrong ");
     } finally {
       setCalling(null);
     }
@@ -75,12 +102,18 @@ const FunctionInputsAndCall = () => {
           <div className="flex flex-col">
             {selectedFunction?.inputs.map((input, i) => (
               <div key={i} className="flex flex-col my-2">
-                <div className="text-sm font-semibold text-s-text">
+                <div className="text-sm font-semibold text-s-text pb-1 pl-1">
                   {input?.name}
                 </div>
                 <input
                   className="border border-p-border rounded-md p-2"
                   placeholder={input.type}
+                  value={inputs[i] || ""}
+                  onChange={(e) => {
+                    const newInputs = [...inputs];
+                    newInputs[i] = e.target.value;
+                    setInputs(newInputs);
+                  }}
                 />
               </div>
             ))}
@@ -90,6 +123,21 @@ const FunctionInputsAndCall = () => {
 
       {/* call button */}
       <div className="mt-4">
+        {selectedFunction?.stateMutability === "payable" && (
+          <>
+            <div className="text-sm font-semibold text-s-text pb-1 pl-1">
+              Value <span className="text-xs text-s-text">(eth)</span>
+            </div>
+            <input
+              className="border border-payable rounded-md p-2 my-2"
+              placeholder={"0.0"}
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            />
+          </>
+        )}
         <button
           className={clsx(
             "text-white font-bold py-2 px-6 rounded-lg start-row ",
@@ -117,10 +165,9 @@ const FunctionInputsAndCall = () => {
           <div className="flex flex-col">
             {selectedFunction?.outputs.map((output, i) => (
               <div key={i} className="flex flex-col my-2">
-                <div className="text-lg font-semibold ">{output?.name}</div>
                 {/* type */}
                 <div className="text-lg start-row font-semibold ">
-                  <span className="text-s-text">{i}</span> :{" "}
+                  <span className="text-s-text">{output?.name ?? i}</span> :{" "}
                   <span className="start-row">
                     <ReturnOutput value={returns[i]} />{" "}
                     <div

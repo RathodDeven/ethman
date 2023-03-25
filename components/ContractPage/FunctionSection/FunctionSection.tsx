@@ -10,12 +10,12 @@ const FunctionSection = () => {
       <div className="h-full overflow-y-auto">
         <div className="font-bold text-4xl">{selectedFunction?.name}</div>
         <SelectedFunctionDescription />
-        <div className="text-xs  text-s-text">
+        {/* <div className="text-xs  text-s-text">
           Statemutability:{" "}
           <span className="font-semibold">
             {selectedFunction?.stateMutability}
           </span>
-        </div>
+        </div> */}
         <FunctionInputsAndCall />
       </div>
     </div>

@@ -2,12 +2,8 @@ import React from "react";
 import Navbar from "./Navbar";
 import Sidebar from "../Sidebar/Sidebar";
 // import GroupMessageSidebar from "../GroupMessage/GroupMessageSidebar";
-import { useContractStore } from "@/store/contract";
-import { useAuth } from "@polybase/react";
 
 const LayoutPage = ({ children }) => {
-  const currentContract = useContractStore((state) => state.currentContract);
-  const { state } = useAuth();
   return (
     <div className="h-[100vh] flex flex-col bg-p-bg relative">
       <Navbar />

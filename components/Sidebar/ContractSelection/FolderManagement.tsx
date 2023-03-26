@@ -9,6 +9,7 @@ import { join } from "path";
 import { ContractType } from "@/types/contract";
 import { ContractAccessType } from "@/types/contractAccess";
 import { AiOutlinePlus } from "react-icons/ai";
+import ContractAddressSelect from "./ContractAddressSelect";
 
 const FolderManagement = ({
   folderAndItsContracts,
@@ -22,6 +23,10 @@ const FolderManagement = ({
   const { hideModal } = usePopUp();
   const pb = usePolybase();
   const { notifyError, notifySuccess } = useNotify();
+
+  console.log("folderAndItsContracts", folderAndItsContracts);
+  console.log("leftCreatedContracts", leftCreatedContracts);
+  console.log("leftAccessContracts", leftAccessContracts);
 
   const deleteFolder = async () => {
     try {
@@ -80,14 +85,13 @@ const FolderManagement = ({
         {leftAccessContracts?.length > 0 &&
           leftAccessContracts.map((contract) => {
             return (
-              <button
-                key={contract.id}
-                onClick={() => addContractToFolder(contract.contract.id)}
-                className="px-4 py-1 start-row hover:bg-p-bg cursor-pointer w-fit rounded-full my-2"
-              >
-                <AiOutlinePlus />
-                <div>{contract.contract.contractAddress}</div>
-              </button>
+              <ContractAddressSelect
+                id={contract.contract.id}
+                onSelectContractAddress={async (addr) => {
+                  addContractToFolder(addr);
+                }}
+                key={contract.contract.id}
+              />
             );
           })}
 

@@ -15,6 +15,7 @@ const FolderAndTheirContractComponent = ({
   leftCreatedContracts: ContractType[];
   leftAccessContracts: ContractAccessType[];
 }) => {
+  console.log("foldersAndTheirContracts", foldersAndTheirContracts);
   return (
     <>
       {foldersAndTheirContracts.map((folderAndTheirContracts, i) => {

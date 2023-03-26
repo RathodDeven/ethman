@@ -44,14 +44,16 @@ const ContractSelectionModal = () => {
   );
 
   React.useEffect(() => {
-    let _createdContracts = createdContracts?.data?.map((c) => ({
-      ...c,
-      type: "created",
-    }));
-    let _accessContracts = accessContracts?.data?.map((c) => ({
-      ...c,
-      type: "access",
-    }));
+    let _createdContracts =
+      createdContracts?.data?.map((c) => ({
+        ...c,
+        type: "created",
+      })) || [];
+    let _accessContracts =
+      accessContracts?.data?.map((c) => ({
+        ...c,
+        type: "access",
+      })) || [];
     const allFolders = folders?.data;
     const _foldersAndTheirContracts: FolderAndTheirContractsType[] = [];
 
@@ -94,16 +96,12 @@ const ContractSelectionModal = () => {
     <div className="w-[360px] py-2 pb-8">
       {/* <AddContractButton /> */}
       <AddFolderButton />
-      {foldersAndTheirContracts.map((f) => {
-        return (
-          <FolderAndTheirContractComponent
-            key={f.folder?.id}
-            foldersAndTheirContracts={foldersAndTheirContracts}
-            leftCreatedContracts={leftCreatedContracts}
-            leftAccessContracts={leftAccessContracts}
-          />
-        );
-      })}
+
+      <FolderAndTheirContractComponent
+        foldersAndTheirContracts={foldersAndTheirContracts}
+        leftCreatedContracts={leftCreatedContracts}
+        leftAccessContracts={leftAccessContracts}
+      />
 
       {leftCreatedContracts?.length > 0 &&
         leftCreatedContracts.map((c) => (

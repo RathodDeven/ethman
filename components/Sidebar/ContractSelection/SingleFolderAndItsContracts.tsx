@@ -87,7 +87,7 @@ const SingleFolderAndItsContracts = ({
           if (contract.type === "accessed") {
             return (
               <div key={contract.id} className="pl-8">
-                <ContractSelectWithJustContractId id={contract.id} />
+                <ContractSelectWithJustContractId id={contract?.contract?.id} />
               </div>
             );
           }

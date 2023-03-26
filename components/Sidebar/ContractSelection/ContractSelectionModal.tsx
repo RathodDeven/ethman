@@ -43,6 +43,8 @@ const ContractSelectionModal = () => {
     pb.collection("Folder").where("createdBy", "==", state?.userId)
   );
 
+  console.log("accessContracts", accessContracts);
+
   React.useEffect(() => {
     let _createdContracts =
       createdContracts?.data?.map((c) => ({
@@ -92,6 +94,8 @@ const ContractSelectionModal = () => {
     setLeftAccessContracts(_accessContracts?.map((c) => c.data));
   }, [createdContracts?.data, accessContracts?.data, folders?.data]);
 
+  console.log("leftAccessContracts", leftAccessContracts);
+
   return (
     <div className="w-[360px] py-2 pb-8">
       {/* <AddContractButton /> */}
@@ -110,7 +114,7 @@ const ContractSelectionModal = () => {
 
       {leftAccessContracts?.length > 0 &&
         leftAccessContracts.map((c) => (
-          <ContractSelectWithJustContractId key={c.id} id={c.id} />
+          <ContractSelectWithJustContractId key={c.id} id={c.contract.id} />
         ))}
     </div>
   );

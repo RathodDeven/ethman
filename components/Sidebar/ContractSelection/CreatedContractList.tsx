@@ -12,7 +12,7 @@ const CreatedContractList = () => {
 
   return (
     <>
-      <div className="text-sm font-semibold text-s-text py-1 mb-3">
+      <div className="text-sm font-semibold text-s-text py-1 my-3">
         Added Contracts :{" "}
       </div>
       {data?.data &&

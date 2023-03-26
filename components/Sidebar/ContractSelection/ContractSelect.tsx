@@ -11,12 +11,12 @@ const ContractSelect = ({ contract }: { contract: ContractType }) => {
     setCurrentContract(contract);
   };
 
-  if (!contract) return <div>loading</div>;
+  if (!contract) return <></>;
 
   return (
     <button
       onClick={onSelect}
-      className="w-full my-3 py-1 px-2 flex flex-col border border-p-border rounded-md hover:bg-p-bg hover:border-p-border items-start "
+      className="w-full my-3 py-1 px-2 flex flex-col border border-p-border rounded-md hover:bg-p-bg hover:border-p-border items-start justify-start"
     >
       <div className="truncate">{contract.name}</div>
       <div className="text-xs text-s-text truncate w-full">

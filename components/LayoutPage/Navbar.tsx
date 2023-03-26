@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useAuth,
   useDocument,
   useIsAuthenticated,
   usePolybase,
+  useRecord,
 } from "@polybase/react";
 import OptionsModal from "../Helpers/OptionsModal";
 import { usePopUp } from "../Contexts/PopUpProvider";
@@ -11,8 +12,8 @@ import SetNameModal from "./SetNameModal";
 import { PublicKey } from "@polybase/client";
 import clsx from "clsx";
 import Image from "next/image";
-import AddContractButton from "../AddContractButton/AddContractButton";
 import { getStampFyiURL } from "@/utils/helper";
+import AddContractButton from "../AddContractButton/AddContractButton";
 
 export interface UserType {
   id: string;
@@ -26,7 +27,7 @@ const Navbar = () => {
   const pb = usePolybase();
   const { showModal } = usePopUp();
   const [openModal, setOpenModal] = React.useState<boolean>(false);
-  const { data } = useDocument<UserType>(
+  const { data } = useRecord<UserType>(
     pb.collection("User").record(String(state?.userId))
   );
 
@@ -39,6 +40,24 @@ const Navbar = () => {
       component: <SetNameModal user={data?.data} />,
     });
   };
+
+  const enableMetamask = async () => {
+    // @ts-ignore
+    if (window.ethereum) {
+      try {
+        // @ts-ignore
+        await window.ethereum.enable();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // @ts-ignore
+    if (!data?.data) return;
+    enableMetamask();
+  }, [data?.data]);
   return (
     <div className=" bg-s-bg flex flex-row w-full justify-between px-8 py-2">
       <div className="centered-row">
@@ -49,18 +68,21 @@ const Navbar = () => {
           height={40}
           alt="Ethman Logo"
         />
-        <div className="text-xl font-bold ml-2">Ethman</div>
+        <div className="flex flex-col">
+          <div className="text-xl font-bold ml-2">Ethman</div>
+          <div className="text-xs text-s-text font-semibold ml-2">
+            Postman for Smart Contract
+          </div>
+        </div>
       </div>
       <div className="self-end">
         {!loading && !authLoading ? (
           <>
-            {isLoggedIn ? (
+            {isLoggedIn && state?.userId ? (
               <>
                 {data?.data ? (
                   <div className="centered-row">
-                    <div>
-                      <AddContractButton />
-                    </div>
+                    <AddContractButton />
                     <OptionsModal
                       OptionsPopUpModal={
                         <div className="flex flex-col space-y-2 w-[150px]">

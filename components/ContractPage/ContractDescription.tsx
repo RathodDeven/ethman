@@ -1,3 +1,4 @@
+import { useContractStore } from "@/store/contract";
 import { ContractType } from "@/types/contract";
 import { useAuth, usePolybase, useRecord } from "@polybase/react";
 import React, { useEffect } from "react";
@@ -16,6 +17,8 @@ const ContractDescription = ({ contract }: { contract: ContractType }) => {
     pb.collection("User").record(String(state?.userId))
   );
   const [hovering, setHovering] = React.useState(false);
+
+  const isAdmin = useContractStore((state) => state.isAdmin);
 
   const handleEdit = async () => {
     try {
@@ -58,26 +61,28 @@ const ContractDescription = ({ contract }: { contract: ContractType }) => {
           {contract?.description ? (
             <div className="text-sm font-semibold">{contract.description}</div>
           ) : (
-            <div
-              className="text-sm text-s-text"
-              onClick={() => {
-                setEditing(true);
-              }}
-            >
-              Add Description
-            </div>
+            <>
+              {isAdmin && (
+                <div
+                  className="text-sm text-s-text"
+                  onClick={() => {
+                    setEditing(true);
+                  }}
+                >
+                  Add Description
+                </div>
+              )}
+            </>
           )}
         </>
       )}
-      {String(contract?.creatorPublicKey) === String(data?.data?.publicKey) &&
-        !editing &&
-        hovering && (
-          <CiEdit
-            onClick={() => {
-              setEditing(true);
-            }}
-          />
-        )}
+      {isAdmin && !editing && hovering && (
+        <CiEdit
+          onClick={() => {
+            setEditing(true);
+          }}
+        />
+      )}
     </div>
   );
 };

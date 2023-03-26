@@ -6,6 +6,8 @@ interface ContractStoreType {
   setCurrentContract: (contract: ContractType) => void;
   selectedFunction: any;
   setSelectedFunction: (f: any) => void;
+  isAdmin: boolean;
+  setIsAdmin: (isAdmin: boolean) => void;
 }
 
 export const useContractStore = create<ContractStoreType>((set) => ({
@@ -20,4 +22,6 @@ export const useContractStore = create<ContractStoreType>((set) => ({
     }),
   selectedFunction: null,
   setSelectedFunction: (f) => set(() => ({ selectedFunction: f })),
+  isAdmin: false,
+  setIsAdmin: (isAdmin) => set(() => ({ isAdmin })),
 }));

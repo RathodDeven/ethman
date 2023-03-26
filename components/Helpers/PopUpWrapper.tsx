@@ -47,7 +47,8 @@ const PopUpWrapper = ({
             onClick={onClick}
             disabled={loading || isDisabled}
           >
-            {loading && <div className="animate-spin" />} <div>{label}</div>
+            {loading && <div className="spinner border-white" />}{" "}
+            <div>{label}</div>
           </button>
         </>
       )}

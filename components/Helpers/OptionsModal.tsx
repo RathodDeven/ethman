@@ -39,14 +39,13 @@ const OptionsModal = ({
   }, [popupRef]);
 
   const handleButtonClick = () => {
-    setShowModal(true);
+    setShowModal((prev) => !prev);
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={popupRef}>
       <div
         className="relative cursor-pointer"
-        ref={popupRef}
         onClick={handleButtonClick}
         id="options-wrapper"
       >
@@ -56,7 +55,7 @@ const OptionsModal = ({
         <div
           className={clsx(
             `absolute min-w-[150px]
-            z-40 bg-s-bg p-2 rounded-xl top-auto border-p-border border`,
+            z-40 bg-s-bg p-2 rounded-xl top-auto border-p-border border shadow-lg`,
             position === "left" && "left-0",
             position === "right" && "right-0",
             !position && "right-0"

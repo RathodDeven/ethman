@@ -1,8 +1,6 @@
-import { ContractType } from "@/types/contract";
 import { ContractAccessType } from "@/types/contractAccess";
 import { useAuth, useCollection, usePolybase } from "@polybase/react";
-import React, { useState } from "react";
-import ContractSelect from "./ContractSelect";
+import React from "react";
 import ContractSelectWithJustContractId from "./ContractSelectWithJustContractId";
 
 const AccessContractList = () => {

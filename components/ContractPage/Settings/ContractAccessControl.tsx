@@ -1,4 +1,5 @@
 import { useNotify } from "@/components/Contexts/NotifyProvider";
+// import { usePushUser } from "@/components/Contexts/PushUserProvider";
 import { useContractStore } from "@/store/contract";
 import { ContractAccessType } from "@/types/contractAccess";
 import { randomString } from "@/utils/helper";
@@ -6,6 +7,8 @@ import { useCollection, usePolybase } from "@polybase/react";
 import React from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { GoDiffAdded } from "react-icons/go";
+// import * as PushAPI from "@pushprotocol/restapi";
+// import { ENV } from "@pushprotocol/uiweb";
 
 const ContractAccessControl = () => {
   const currentContract = useContractStore((state) => state.currentContract);
@@ -13,6 +16,8 @@ const ContractAccessControl = () => {
   const [givingAccess, setGivingAccess] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const { notifyError, notifySuccess } = useNotify();
+  // const { user, decryptPrivateKey, decryptedPvtKey } = usePushUser();
+  // const { state } = useAuth();
 
   const { data } = useCollection<ContractAccessType>(
     pb
@@ -37,6 +42,39 @@ const ContractAccessControl = () => {
           toAddr,
         ]);
       inputRef.current!.value = "";
+
+      // updating group chat, adding new member to group chat
+      // const chatId = currentContract?.groupChatId;
+      // if (chatId) {
+      //   const groupDetails = await PushAPI.chat.getGroup({
+      //     chatId: chatId,
+      //   });
+
+      //   console.log("groupDetails", groupDetails);
+
+      //   const response = await PushAPI.chat.updateGroup({
+      //     chatId: chatId,
+      //     admins: [
+      //       ...groupDetails.members.map((m) => {
+      //         if (m.isAdmin) {
+      //           return m.wallet;
+      //         }
+      //       }),
+      //       toAddr,
+      //     ],
+      //     members: [],
+      //     groupDescription: groupDetails.groupDescription,
+      //     groupImage: groupDetails.groupImage,
+      //     groupName: groupDetails.groupName,
+      //     account: state?.userId,
+      //     env: ENV.STAGING,
+      //     pgpPrivateKey: decryptedPvtKey,
+      //   });
+
+      //   console.log(response);
+      //   notifySuccess("Added to contract group chat");
+      // }
+
       notifySuccess("Access given successfully");
     } catch (error) {
       notifyError(`Something went wrong | ${error.message}`);
@@ -57,7 +95,6 @@ const ContractAccessControl = () => {
     }
   };
 
-  console.log(data);
   return (
     <div>
       <div className="text-sm text-s-text font-semibold my-2">
@@ -73,10 +110,7 @@ const ContractAccessControl = () => {
           ref={inputRef}
         />
         {givingAccess ? (
-          <svg
-            className="animate-spin h-5 w-5 mr-3 ..."
-            viewBox="0 0 24 24"
-          ></svg>
+          <div className="w-5 h-5 spinner border-black" />
         ) : (
           <GoDiffAdded onClick={addAccess} className="w-5 h-5 text-p-text" />
         )}

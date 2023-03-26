@@ -6,6 +6,7 @@ import { Auth } from "@polybase/auth";
 import PopUpProvider from "@/components/Contexts/PopUpProvider";
 import { NotifyProvider } from "@/components/Contexts/NotifyProvider";
 import LayoutPage from "@/components/LayoutPage/LayoutPage";
+import PushUserProvider from "@/components/Contexts/PushUserProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   const polybase = new Polybase({
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <PolybaseProvider polybase={polybase}>
       {/* @ts-ignore */}
       <AuthProvider auth={auth} polybase={polybase}>
+        {/* <PushUserProvider> */}
         <NotifyProvider>
           <PopUpProvider>
             <LayoutPage>
@@ -23,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </LayoutPage>
           </PopUpProvider>
         </NotifyProvider>
+        {/* </PushUserProvider> */}
       </AuthProvider>
     </PolybaseProvider>
   );

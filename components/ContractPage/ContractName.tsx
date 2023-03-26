@@ -1,3 +1,4 @@
+import { useContractStore } from "@/store/contract";
 import { ContractType } from "@/types/contract";
 import { useAuth, usePolybase, useRecord } from "@polybase/react";
 import clsx from "clsx";
@@ -8,14 +9,11 @@ import { useNotify } from "../Contexts/NotifyProvider";
 import { UserType } from "../LayoutPage/Navbar";
 
 const ContractName = ({ contract }: { contract: ContractType }) => {
+  const isAdmin = useContractStore((state) => state.isAdmin);
   const [editing, setEditing] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const { state } = useAuth();
   const pb = usePolybase();
   const { notifyError, notifySuccess } = useNotify();
-  const { data } = useRecord<UserType>(
-    pb.collection("User").record(String(state?.userId))
-  );
   const [hovering, setHovering] = React.useState(false);
 
   const handleEdit = async () => {
@@ -56,15 +54,13 @@ const ContractName = ({ contract }: { contract: ContractType }) => {
       ) : (
         <div className="text-xl font-semibold">{contract.name}</div>
       )}
-      {String(contract?.creatorPublicKey) === String(data?.data?.publicKey) &&
-        !editing &&
-        hovering && (
-          <CiEdit
-            onClick={() => {
-              setEditing(true);
-            }}
-          />
-        )}
+      {isAdmin && !editing && hovering && (
+        <CiEdit
+          onClick={() => {
+            setEditing(true);
+          }}
+        />
+      )}
     </div>
   );
 };

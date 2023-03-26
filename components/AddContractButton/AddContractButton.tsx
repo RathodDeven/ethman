@@ -13,9 +13,12 @@ const AddContractButton = () => {
   return (
     <button
       onClick={onButtonClick}
-      className="centered-row border-p-border border rounded-lg bg-s-bg hover:bg-p-bg cursor-pointer p-2 px-3"
+      className="centered-row border-p-border border rounded-lg bg-s-bg hover:bg-p-bg cursor-pointer p-1"
     >
-      <AiOutlinePlus /> <div className="font-semibold">Contract</div>
+      <AiOutlinePlus className="text-xl text-s-text hover:text-p-text" />
+      <div className="font-semibold text-s-text hover:text-p-text">
+        Add Contract
+      </div>
     </button>
   );
 };

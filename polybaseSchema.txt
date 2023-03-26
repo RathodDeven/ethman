@@ -1,0 +1,174 @@
+// This is an example collection definition.
+// You should edit it for your use case.
+
+// The language (Polylang) is similar to JavaScript,
+// but semi-colons are mandatory.
+
+// The `collection` keyword defines a named collection.
+// Collection properties define the "columns" in a record.
+
+// @`public` means that the collection is public, anyone can view and read
+// the records in the collection. You can still implement rules on who can 
+// edit the data by defining functions on the collection and checking the public key.
+
+/* estlint-disable */
+
+@public
+collection User {
+  // `id` is unique and required on all collections
+  id: string;
+
+  // We will use a public key to authenticate function
+  // calls later
+  publicKey: PublicKey;
+  userName?: string;
+
+  // `constructor` is called when a new record is
+  // created, make sure to assign a value to `this.id`
+  constructor (id: string) {
+    // `this.id` must be assigned in the constructor
+    // `this.id` must be unique in collection
+    this.id = id;
+    
+    // You can assign the publicKey of the user who is
+    // creating the record, this can then be used to
+    // control permissions for the record (see below)
+    this.publicKey = ctx.publicKey;
+  }
+
+  // You can add your own functions to determine rules
+  // on who can update the records data
+  function setUserName (userName: string) {
+    // Check if the caller is the original creator of the record.
+    if (ctx.publicKey != this.publicKey) {
+      error('You are not the creator of this record.');
+    }
+    this.userName = userName;
+  }
+
+  @index(userName);
+}
+
+@public
+collection Contract {
+  id: string;
+  name: string;
+  description?: string;
+  creator: User;
+  creatorAddress: string;
+  creatorPublicKey: PublicKey;
+  contractAddress: string;
+  abi: string;
+  functionDescription: map<string, string>;
+
+  constructor (id: string, name: string, abi: string, contractAddress: string, creator: User) {
+    this.id = id;
+    this.name = name;
+    this.abi = abi;
+    this.creator = creator;
+    this.creatorAddress = creator.id;
+    this.contractAddress = contractAddress;
+    this.functionDescription = {};
+    this.creatorPublicKey = ctx.publicKey;
+  }
+
+  function setName (name: string) {
+    if (ctx.publicKey != this.creatorPublicKey) {
+      error('You are not the creator of this record.');
+    }
+    this.name = name;
+  }
+
+  function updateContract(abi: string, contractAddress: string) {
+    if (ctx.publicKey != this.creatorPublicKey) {
+      error('You are not the creator of this record.');
+    }
+
+    this.abi = abi;
+    this.contractAddress = contractAddress;
+  }
+
+  function setDescription (description: string) {
+    if (ctx.publicKey != this.creatorPublicKey) {
+      error('You are not the creator of this record.');
+    }
+    this.description = description;
+  }
+
+  function setDescriptionOfFunction (functionName: string, description: string) {
+    if(ctx.publicKey != this.creatorPublicKey) {
+      error('You are not the creator of this record.');
+    }
+
+    this.functionDescription[functionName] = description;
+    
+  }
+
+  del () {
+    if(ctx.publicKey != this.creatorPublicKey) {
+      error('You are not the creator of this record.');
+    }
+
+    selfdestruct();
+    
+  }
+
+  @index(creatorPublicKey, creator, creatorAddress);
+  
+}
+
+@public
+collection ContractAccess {
+  id: string;
+  contract: Contract;
+  accessUserId: string;
+
+  constructor (id: string, contract: Contract, accessUserId: string) {
+    this.id = id;
+    if (ctx.publicKey != contract.creatorPublicKey) {
+      error('Only Creator can add access to contract');
+    }
+    this.contract = contract;
+    this.accessUserId = accessUserId;
+  }
+
+  
+  del () {
+    selfdestruct();
+  }
+
+  @index(contract, accessUserId);
+}
+
+@public
+collection Folder {
+  id: string;
+  name: string;
+  createdBy: string;
+  creatorPublicKey: PublicKey;
+  contractsId: string[];
+
+  constructor (id: string, name: string, createdBy: string) {
+    this.id = id;
+    this.name = name;
+    this.createdBy = createdBy;
+    this.contractsId = [];
+    this.creatorPublicKey = ctx.publicKey;
+  }
+
+  function addContractId (contractId: string) {
+    if (ctx.publicKey != this.creatorPublicKey){
+      error('Only Creator can add contract to this folder');
+    }
+    this.contractsId.push(contractId);
+  }
+
+  del () {
+    if (ctx.publicKey != this.creatorPublicKey){
+      error('Only Creator can add contract to this folder');
+    }
+    selfdestruct();
+  }
+
+  @index(createdBy);
+}

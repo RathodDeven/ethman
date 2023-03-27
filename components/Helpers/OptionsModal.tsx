@@ -10,12 +10,14 @@ const OptionsModal = ({
   showModal,
   setShowModal,
   position,
+  beforeButtonClick,
 }: {
   children: React.ReactNode;
   OptionsPopUpModal: React.ReactNode;
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   position?: "left" | "right";
+  beforeButtonClick?: (callback: () => void) => void;
 }) => {
   const popupRef = useRef(null);
 
@@ -46,7 +48,13 @@ const OptionsModal = ({
     <div className="relative" ref={popupRef}>
       <div
         className="relative cursor-pointer"
-        onClick={handleButtonClick}
+        onClick={() => {
+          if (beforeButtonClick) {
+            beforeButtonClick(handleButtonClick);
+          } else {
+            handleButtonClick();
+          }
+        }}
         id="options-wrapper"
       >
         {children}

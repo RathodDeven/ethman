@@ -1,14 +1,11 @@
-import AddContractButton from "@/components/AddContractButton/AddContractButton";
 import { ContractType } from "@/types/contract";
 import { ContractAccessType } from "@/types/contractAccess";
 import { FolderType } from "@/types/folder";
 import { useAuth, useCollection, usePolybase } from "@polybase/react";
 import React from "react";
-import AccessContractList from "./AccessContractList";
 import AddFolderButton from "./AddFolderButton";
 import ContractSelect from "./ContractSelect";
 import ContractSelectWithJustContractId from "./ContractSelectWithJustContractId";
-import CreatedContractList from "./CreatedContractList";
 import FolderAndTheirContractComponent from "./FolderAndTheirContractComponent";
 
 export interface FolderAndTheirContractsType {
@@ -42,8 +39,6 @@ const ContractSelectionModal = () => {
   const { data: folders } = useCollection<FolderType>(
     pb.collection("Folder").where("createdBy", "==", state?.userId)
   );
-
-  console.log("accessContracts", accessContracts);
 
   React.useEffect(() => {
     let _createdContracts =
@@ -93,8 +88,6 @@ const ContractSelectionModal = () => {
     setLeftCreatedContracts(_createdContracts?.map((c) => c.data));
     setLeftAccessContracts(_accessContracts?.map((c) => c.data));
   }, [createdContracts?.data, accessContracts?.data, folders?.data]);
-
-  console.log("leftAccessContracts", leftAccessContracts);
 
   return (
     <div className="w-[360px] py-2 pb-8">

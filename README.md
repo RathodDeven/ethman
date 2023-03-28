@@ -11,13 +11,14 @@
 - Access contract - Grant or revoke access to contracts with your colleagues and clients.
 - Descriptions - Add description to every contract, and to each function in a contract.
 
-## To do improvments
+## Upcoming improvments
 
 - Signless write on polybase (using custom api as relayer)
 - Folder strucutre UI/UX improvements
 - User managements and user authentication improvements, including searching of users for access control.
 - Provide link if verified and public on blockchain explorer, and fetch contract address and abi automatically.
 - Comments section for Communications
+- Multichain support - Easily add contracts from other chains. (Currently, only mumbai contracts are supported)
 
 ## Tech
 

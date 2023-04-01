@@ -19,6 +19,7 @@
 - Provide link if verified and public on blockchain explorer, and fetch contract address and abi automatically.
 - Comments section for Communications
 - Multichain support - Easily add contracts from other chains. (Currently, only mumbai contracts are supported)
+- Collections/Clusters of smart  contracts (usefull to gather smarts contract related to same project/company in on group)
 
 ## Tech
 
